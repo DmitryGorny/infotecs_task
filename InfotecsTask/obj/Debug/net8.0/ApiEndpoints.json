@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "InfotecsTask.Controllers.ValuesController",
+    "Method": "FileReader",
+    "RelativePath": "api/values",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "csv_file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

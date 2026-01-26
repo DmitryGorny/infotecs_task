@@ -1,5 +1,7 @@
 ﻿using InfotecsTask.Dtos.ValuesDtos;
 using InfotecsTask.Repositories.ValuesRepository;
+using InfotecsTask.Services.FacadeValuesResults;
+using InfotecsTask.Services.ResultsService;
 using InfotecsTask.Services.ValuesService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -17,20 +19,26 @@ namespace InfotecsTask.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly IValuesService _valuesService;
+        private readonly IResultsService _resultsService;
+        private readonly IFacadeService _facadeService;
 
-        public ValuesController(IValuesService valuesService)
+        public ValuesController(IValuesService valuesService, IFacadeService facadeService, IResultsService resultsService)
         {
             _valuesService = valuesService;
+            _facadeService = facadeService;
+            _resultsService = resultsService;
         }
 
-        [HttpPost]
+        [HttpPost("upload")]
         public async Task<IActionResult> FileReader(IFormFile csv_file)
         {
+            Console.WriteLine(csv_file.Length);
             if (csv_file == null || csv_file.Length == 0) return BadRequest("Файл не выбран");
 
             var reader = new StreamReader(csv_file.OpenReadStream(), Encoding.UTF8);
             List<string> errors = new List<string>();
-            errors =await _valuesService.CreateValues(reader);
+            string fileName = csv_file.FileName;
+            errors = await _facadeService.CreateValuesResults(reader, fileName);
                
             if (errors.Any())
             {

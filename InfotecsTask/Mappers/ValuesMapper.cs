@@ -13,6 +13,7 @@ namespace InfotecsTask.Mappers
                 Date = dto.Date,
                 ExecutionTime = dto.ExecutionTime,
                 Value = dto.Value,
+                FileName = dto.FileName,
             };
         } 
     }

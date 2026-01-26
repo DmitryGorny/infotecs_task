@@ -15,18 +15,7 @@ namespace InfotecsTask.Repositories.ValuesRepository
 
         public async Task BulkCreateAsync(List<Values> values)
         {
-            await using var transaction = await _db_context.Database.BeginTransactionAsync();
-            try
-            {
-                await _db_context.BulkInsertAsync(values);
-                await _db_context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            await _db_context.BulkInsertAsync(values);
         }
     }
 }

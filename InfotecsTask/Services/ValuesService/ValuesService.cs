@@ -1,9 +1,8 @@
 ﻿using InfotecsTask.Dtos.ValuesDtos;
 using InfotecsTask.Mappers;
 using InfotecsTask.Models;
+using InfotecsTask.Repositories.Results;
 using InfotecsTask.Repositories.ValuesRepository;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
@@ -14,29 +13,40 @@ namespace InfotecsTask.Services.ValuesService
     {
 
         protected readonly IValuesRepository _ValueRepository;
+        private List<Values> _values { get; set; }
+
+        public IReadOnlyList<Values> GetValues() {
+           return _values.AsReadOnly();
+        }
 
         public ValuesServiceBase(IValuesRepository valueRepository)
         {
             _ValueRepository = valueRepository;
         }
 
-        public async Task<List<string>> CreateValues(StreamReader reader)
+        public async Task<List<string>> CreateValues(StreamReader reader, string file_name)
         {
             List<string> errors = new List<string>();
             string line;
             int line_number = 0;
-            List<Values> ValuesEnteties= new List<Values>();
+            _values = new List<Values>();
 
-            while ((line = reader.ReadLine()) != null)
+            while ((line = await reader.ReadLineAsync()) != null)
             {
                 if (line_number == 0)
                 {
                     line_number++;
                     continue;
                 }
+
+                if (line_number >= 10000)
+                {
+                    errors.Add("Ошибка: Файл содержит больше чем 10000 строк");
+                    break;
+                }
                 string[] line_arr = line.Split(";");
                 List<string> current_errors = new List<string>();
-                ValuesDtoCreate? dto = ParseLine(line_arr, out current_errors);
+                ValuesDtoCreate? dto = ParseLine(line_arr, file_name, out current_errors);
 
                 if (dto == null)
                 {
@@ -58,17 +68,25 @@ namespace InfotecsTask.Services.ValuesService
                 }
 
                 Values values_from_dto = dto.ToValuesFromCreateDto();
-                ValuesEnteties.Add(values_from_dto);
+                _values.Add(values_from_dto);
+                line_number++;
             }
             if (errors.Count > 0) 
             {
                 return errors;
             }
 
-            await SaveToDB(ValuesEnteties);
+            if (_values.Count == 0)
+            {
+                errors.Clear();
+                errors.Add($"Ошибка: Файл пуст");
+                return errors;
+            }
+  
+            await SaveToDB(_values);
             return errors;
         }
-        protected abstract ValuesDtoCreate? ParseLine(string[] line, out List<string> errors);
+        protected abstract ValuesDtoCreate? ParseLine(string[] line, string file_name, out List<string> errors);
 
         protected abstract Task SaveToDB(List<Values> values);
 
@@ -77,6 +95,7 @@ namespace InfotecsTask.Services.ValuesService
         protected abstract double? ParceExecutionTime(string execution_time, out string? error);
 
         protected abstract decimal? ParceValue(string value, out string? error);
+
     }
 
     public class ValuesService : ValuesServiceBase, IValuesService
@@ -87,7 +106,7 @@ namespace InfotecsTask.Services.ValuesService
         
         }
 
-        protected override ValuesDtoCreate? ParseLine(string[] line, out List<string> errors)
+        protected override ValuesDtoCreate? ParseLine(string[] line, string file_name, out List<string> errors)
         {
             errors = new List<string>();
 
@@ -118,7 +137,12 @@ namespace InfotecsTask.Services.ValuesService
             {
                 return null;
             }
-            return new ValuesDtoCreate { Date = date!.Value, ExecutionTime = execution_time!.Value, Value = value!.Value };
+            return new ValuesDtoCreate { 
+                Date = date!.Value, 
+                ExecutionTime = execution_time!.Value, 
+                Value = value!.Value,
+                FileName = file_name,    
+            };
             
             
         }

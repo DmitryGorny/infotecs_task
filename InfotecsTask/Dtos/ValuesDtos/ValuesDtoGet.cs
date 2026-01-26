@@ -7,6 +7,7 @@ namespace InfotecsTask.Dtos.ValuesDtos
 
         public string Date { get; set; }
 
+        public string FileName { get; set; }
         public double ExecutionTime { get; set; }
         public decimal Value { get; set; }
     }

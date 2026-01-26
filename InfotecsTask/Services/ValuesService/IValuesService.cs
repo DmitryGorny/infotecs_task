@@ -6,7 +6,7 @@ namespace InfotecsTask.Services.ValuesService
 {
     public interface IValuesService
     {
-        public bool CreateValues(StreamReader reader, out List<string> errors);
+        public Task<List<string>> CreateValues(StreamReader reader);
     }
 
     }

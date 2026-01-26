@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InfotecsTask")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c7cee30f3ad03814894500ad06f64885c09a25ab")]
 [assembly: System.Reflection.AssemblyProductAttribute("InfotecsTask")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InfotecsTask")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

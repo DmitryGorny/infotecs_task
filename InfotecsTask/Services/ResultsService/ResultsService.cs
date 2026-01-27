@@ -28,7 +28,7 @@ namespace InfotecsTask.Services.ResultsService
 
             ResultsCreateDto dto = new ResultsCreateDto 
             {
-                FileName = values[0].FileName,
+                FileId = values[0].FileId,
                 DeltaTimeSeconds = DeltaTimeSeconds,
                 MinDate = StartTime,
                 AvgExecutionTime = ExecutionTime,

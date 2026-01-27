@@ -5,7 +5,7 @@ namespace InfotecsTask.Dtos.ResultsDto
     public class ResultsCreateDto
     {
         [Required]
-        public string FileName { get; set; }
+        public int FileId { get; set; }
 
         [Required]
         public double DeltaTimeSeconds { get; set; }

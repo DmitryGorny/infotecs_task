@@ -8,7 +8,7 @@ namespace InfotecsTask.Mappers
         {
             return new Models.Results
             {
-                FileName = dto.FileName,
+                FileId = dto.FileId,
                 DeltaTimeSeconds = dto.DeltaTimeSeconds,
                 MinDate = dto.MinDate,
                 AvgExecutionTime = dto.AvgExecutionTime,

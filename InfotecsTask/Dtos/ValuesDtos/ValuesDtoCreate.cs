@@ -11,7 +11,7 @@ namespace InfotecsTask.Dtos.ValuesDtos
         public DateTime Date { get; set; }
 
         [Required]
-        public string FileName { get; set; }
+        public int FileId { get; set; }
 
         [Required]
         [Range(0.0, double.MaxValue, MinimumIsExclusive = true)]

@@ -1,7 +1,11 @@
 ﻿using InfotecsTask.Data;
+using InfotecsTask.Dtos.FilesDto;
+using InfotecsTask.Mappers;
 using InfotecsTask.Models;
+using InfotecsTask.Repositories.Files;
 using InfotecsTask.Services.ResultsService;
 using InfotecsTask.Services.ValuesService;
+using SQLitePCL;
 
 namespace InfotecsTask.Services.FacadeValuesResults
 {
@@ -9,41 +13,65 @@ namespace InfotecsTask.Services.FacadeValuesResults
     {
         private readonly IValuesService _valuesService;
         private readonly IResultsService _resultsService;
+        private readonly IFilesRepository _fileRepository;
         private readonly AppDBContext _dbContext;
 
-        public FacadeService(IValuesService valuesService, IResultsService resultsServise, AppDBContext context)
+        public FacadeService(IValuesService valuesService,
+            IResultsService resultsServise,
+            AppDBContext context,
+            IFilesRepository filesRepository)
         {
             _valuesService = valuesService;
             _resultsService = resultsServise;
             _dbContext = context;
+            _fileRepository = filesRepository;
         }
 
         public async Task<List<string>> CreateValuesResults(StreamReader reader, string file_name)
         {
+            if (string.IsNullOrWhiteSpace(file_name)) 
+                return new List<string> { "Ошибка: Название файла не может быть пустым" };
+
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
-                List<string> errors = await _valuesService.CreateValues(reader, file_name);
+                Files file = await CreateFile(file_name);
+                List<string> errors = await _valuesService.CreateValues(reader, file.Id);
                 IReadOnlyList<Values> values = _valuesService.GetValues();
 
                 if (errors.Any())
                 {
-                    transaction.Rollback();
+                    await transaction.RollbackAsync();
+                    await RemoveFile(file);
                     return errors;
                 } 
 
                 await _resultsService.CreateResult(values);
 
-                _dbContext.SaveChanges(); 
-                transaction.Commit();
+                await _dbContext.SaveChangesAsync(); 
+                await transaction.CommitAsync();
 
                 return errors;
             }
             catch
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 throw;
             }
+        }
+
+        private async Task<Files> CreateFile(string file_name)
+        {
+            FilesCreateDto file_dto = new FilesCreateDto { FileName = file_name };
+            Files file = file_dto.ToFilesFromCreateDto();
+            await _fileRepository.DeleteFile(file);
+            file = await _fileRepository.SaveFile(file);
+            return file;
+        }
+
+        private async Task RemoveFile(Files file)
+        {
+            await _fileRepository.DeleteFile(file);
         }
     }
 }

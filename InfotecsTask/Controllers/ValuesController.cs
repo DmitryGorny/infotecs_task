@@ -32,7 +32,6 @@ namespace InfotecsTask.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> FileReader(IFormFile csv_file)
         {
-            Console.WriteLine(csv_file.Length);
             if (csv_file == null || csv_file.Length == 0) return BadRequest("Файл не выбран");
 
             var reader = new StreamReader(csv_file.OpenReadStream(), Encoding.UTF8);

@@ -24,8 +24,9 @@ namespace InfotecsTask.Services.ValuesService
             _ValueRepository = valueRepository;
         }
 
-        public async Task<List<string>> CreateValues(StreamReader reader, string file_name)
+        public async Task<List<string>> CreateValues(StreamReader reader, int file_id)
         {
+            Console.WriteLine(file_id);
             List<string> errors = new List<string>();
             string line;
             int line_number = 0;
@@ -46,7 +47,7 @@ namespace InfotecsTask.Services.ValuesService
                 }
                 string[] line_arr = line.Split(";");
                 List<string> current_errors = new List<string>();
-                ValuesDtoCreate? dto = ParseLine(line_arr, file_name, out current_errors);
+                ValuesDtoCreate? dto = ParseLine(line_arr, file_id, out current_errors);
 
                 if (dto == null)
                 {
@@ -86,7 +87,7 @@ namespace InfotecsTask.Services.ValuesService
             await SaveToDB(_values);
             return errors;
         }
-        protected abstract ValuesDtoCreate? ParseLine(string[] line, string file_name, out List<string> errors);
+        protected abstract ValuesDtoCreate? ParseLine(string[] line, int file_id, out List<string> errors);
 
         protected abstract Task SaveToDB(List<Values> values);
 
@@ -106,7 +107,7 @@ namespace InfotecsTask.Services.ValuesService
         
         }
 
-        protected override ValuesDtoCreate? ParseLine(string[] line, string file_name, out List<string> errors)
+        protected override ValuesDtoCreate? ParseLine(string[] line, int file_id, out List<string> errors)
         {
             errors = new List<string>();
 
@@ -141,7 +142,7 @@ namespace InfotecsTask.Services.ValuesService
                 Date = date!.Value, 
                 ExecutionTime = execution_time!.Value, 
                 Value = value!.Value,
-                FileName = file_name,    
+                FileId = file_id,    
             };
             
             

@@ -3,7 +3,8 @@
     public class Results
     {
         public int Id { get; set; }
-        public string FileName { get; set; }
+        public int FileId { get; set; }
+        public Files File { get; set; }
         public double DeltaTimeSeconds { get; set; }
         public DateTime MinDate { get; set; }
         public double AvgExecutionTime { get; set; }

@@ -15,5 +15,7 @@ namespace InfotecsTask.Data
 
         public DbSet<Values> Values { get; set; }
         public DbSet<Models.Results> Results { get; set; }
+
+        public DbSet<Models.Files> Files { get; set; }
     }
 }

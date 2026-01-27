@@ -3,6 +3,7 @@ using System;
 using InfotecsTask.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InfotecsTask.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260127125958_Modifyed_Added_Files")]
+    partial class Modifyed_Added_Files
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,12 +99,15 @@ namespace InfotecsTask.Migrations
                     b.Property<int>("FileId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("FilesId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("FilesId");
 
                     b.ToTable("Values");
                 });
@@ -119,13 +125,9 @@ namespace InfotecsTask.Migrations
 
             modelBuilder.Entity("InfotecsTask.Models.Values", b =>
                 {
-                    b.HasOne("InfotecsTask.Models.Files", "File")
+                    b.HasOne("InfotecsTask.Models.Files", null)
                         .WithMany("Values")
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("File");
+                        .HasForeignKey("FilesId");
                 });
 
             modelBuilder.Entity("InfotecsTask.Models.Files", b =>

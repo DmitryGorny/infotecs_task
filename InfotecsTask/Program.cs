@@ -1,4 +1,5 @@
 using InfotecsTask.Data;
+using InfotecsTask.Repositories.Files;
 using InfotecsTask.Repositories.Results;
 using InfotecsTask.Repositories.ValuesRepository;
 using InfotecsTask.Services.FacadeValuesResults;
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IValuesRepository, ValuesRepository>();
 builder.Services.AddScoped<IResultsRepository, ResultsRepository>();
+builder.Services.AddScoped<IFilesRepository, FilesRepository>();
 builder.Services.AddScoped<IValuesService, ValuesService>();
 builder.Services.AddScoped<IResultsService, ResultsService>();
 builder.Services.AddScoped<IFacadeService, FacadeService>();

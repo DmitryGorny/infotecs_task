@@ -2,7 +2,7 @@
   {
     "ContainingType": "InfotecsTask.Controllers.ValuesController",
     "Method": "FileReader",
-    "RelativePath": "api/values",
+    "RelativePath": "api/values/upload",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

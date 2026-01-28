@@ -50,6 +50,12 @@ namespace InfotecsTask.Services.ResultsService
             return results;
         }
 
+        public async Task<List<Results>> GetSortedResults(string file_name)
+        {
+            var results = await _resultsRepository.GetSorted(file_name);
+            return results;
+        }
+
         protected abstract double CalculateDeltaTimeSeconds(IReadOnlyList<Values> values);
         protected abstract DateTime GetStartTime(IReadOnlyList<Values> values);
         protected abstract double CalculateAverageExecutionTime(IReadOnlyList<Values> values);

@@ -19,5 +19,13 @@ namespace InfotecsTask.Controllers
            List<Models.Results> results = await _resultsService.GetFilteredResults(query);
            return Ok(results);
         }
+
+
+        [HttpGet("sorted")]
+        public async Task<IActionResult> GetSortedList([FromQuery] string fileName)
+        {
+            List<Models.Results> results = await _resultsService.GetSortedResults(fileName);
+            return Ok(results);
+        }
     }
 }

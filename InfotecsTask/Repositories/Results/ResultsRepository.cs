@@ -46,5 +46,14 @@ namespace InfotecsTask.Repositories.Results
 
             return await q.ToListAsync();
         }
+
+        public async Task<List<Models.Results>> GetSorted(string file_name)
+        {
+            var query = _db_context.Results.Include(r => r.File)
+                                            .Where(r => r.File.FileName == file_name)
+                                            .OrderByDescending(r => r.MinDate)
+                                            .Take(10);
+            return await query.ToListAsync();
+        }
     }
 }

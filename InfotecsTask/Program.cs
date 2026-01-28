@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"))
 );
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

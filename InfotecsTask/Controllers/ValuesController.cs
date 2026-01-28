@@ -1,4 +1,5 @@
 ﻿using InfotecsTask.Dtos.ValuesDtos;
+using InfotecsTask.Models;
 using InfotecsTask.Repositories.ValuesRepository;
 using InfotecsTask.Services.FacadeValuesResults;
 using InfotecsTask.Services.ResultsService;
@@ -44,6 +45,13 @@ namespace InfotecsTask.Controllers
                 return BadRequest(errors);
             }
             return Ok("Файл записан в базу");
+        }
+
+        [HttpGet("sorted")]
+        public async Task<IActionResult> GetSortedList([FromQuery] string fileName)
+        {
+            List<Values> results = await _valuesService.GetSortedValues(fileName);
+            return Ok(results);
         }
 
     }

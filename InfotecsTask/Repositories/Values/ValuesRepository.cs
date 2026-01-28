@@ -17,5 +17,14 @@ namespace InfotecsTask.Repositories.ValuesRepository
         {
             await _db_context.BulkInsertAsync(values);
         }
+
+        public async Task<List<Values>> GetSorted(string file_name)
+        {
+            var query = _db_context.Values.Include(r => r.File)
+                                            .Where(r => r.File.FileName == file_name)
+                                            .OrderByDescending(r => r.Date)
+                                            .Take(10);
+            return await query.ToListAsync();
+        }
     }
 }

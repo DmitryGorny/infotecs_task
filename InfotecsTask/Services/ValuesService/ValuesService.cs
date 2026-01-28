@@ -24,6 +24,12 @@ namespace InfotecsTask.Services.ValuesService
             _ValueRepository = valueRepository;
         }
 
+        public async Task<List<Values>> GetSortedValues(string file_name)
+        {
+            var results = await _ValueRepository.GetSorted(file_name);
+            return results;
+        }
+
         public async Task<List<string>> CreateValues(StreamReader reader, int file_id)
         {
             List<string> errors = new List<string>();

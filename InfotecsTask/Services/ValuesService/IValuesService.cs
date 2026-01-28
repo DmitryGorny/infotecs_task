@@ -10,6 +10,8 @@ namespace InfotecsTask.Services.ValuesService
         public Task<List<string>> CreateValues(StreamReader reader, int file_id);
 
         public IReadOnlyList<Values> GetValues();
+
+        public Task<List<Values>> GetSortedValues(string file_name);
     }
 
-    }
+}

@@ -8,7 +8,5 @@ namespace InfotecsTask.Repositories.Results
         public Task CreateAsync(Models.Results result);
 
         public Task<List<Models.Results>> GetFiltered(ResultsQuery query);
-
-        public Task<List<Models.Results>> GetSorted(string file_name);
     }
 }

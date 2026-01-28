@@ -28,7 +28,7 @@
 ## Установка и запуск
 
 1. Клонируйте репозиторий:  
-git clone https://github.com/yourusername/InfotecsTask.git
+git clone https://github.com/DmitryGorny/infotecs_task.git
 cd InfotecsTask
 
 2. Настройте подключение к PostgreSQL в appsettings.json:

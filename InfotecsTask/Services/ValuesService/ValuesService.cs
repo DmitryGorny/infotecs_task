@@ -12,6 +12,8 @@ namespace InfotecsTask.Services.ValuesService
     public abstract class ValuesServiceBase : IValuesService
     {
 
+        public const int MIN_COLUMNS = 3;
+
         protected readonly IValuesRepository _ValueRepository;
         private List<Values> _values { get; set; }
 
@@ -43,6 +45,11 @@ namespace InfotecsTask.Services.ValuesService
                     break;
                 }
                 string[] line_arr = line.Split(";");
+
+                if (line_arr.Length < MIN_COLUMNS) 
+                {
+                    return new List<string> { "Ошибка: Файл должен содержать минимум 3 столбца" };
+                }
                 List<string> current_errors = new List<string>();
                 ValuesDtoCreate? dto = ParseLine(line_arr, out current_errors);
 
@@ -100,7 +107,6 @@ namespace InfotecsTask.Services.ValuesService
 
     public class ValuesService : ValuesServiceBase, IValuesService
     {
-
         public ValuesService(IValuesRepository repository) : base(repository)
         { 
         

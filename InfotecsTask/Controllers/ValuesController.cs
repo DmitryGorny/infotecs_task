@@ -1,4 +1,5 @@
 ﻿using InfotecsTask.Dtos.ValuesDtos;
+using InfotecsTask.Mappers;
 using InfotecsTask.Models;
 using InfotecsTask.Repositories.ValuesRepository;
 using InfotecsTask.Services.FacadeValuesResults;
@@ -33,8 +34,6 @@ namespace InfotecsTask.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> FileReader(IFormFile csv_file)
         {
-            if (csv_file == null || csv_file.Length == 0) return BadRequest("Файл не выбран");
-
             var reader = new StreamReader(csv_file.OpenReadStream(), Encoding.UTF8);
             List<string> errors = new List<string>();
             string fileName = csv_file.FileName;
@@ -51,6 +50,7 @@ namespace InfotecsTask.Controllers
         public async Task<IActionResult> GetSortedList([FromQuery] string fileName)
         {
             List<Values> results = await _valuesService.GetSortedValues(fileName);
+            results.Select(v => v.ToDtoFromValues());
             return Ok(results);
         }
 

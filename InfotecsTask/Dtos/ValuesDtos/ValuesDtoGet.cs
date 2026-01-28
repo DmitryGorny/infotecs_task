@@ -3,9 +3,7 @@ namespace InfotecsTask.Dtos.ValuesDtos
 {
     public class ValuesDtoGet
     {
-        public int Id { get; set; }
-
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
         public string FileName { get; set; }
         public double ExecutionTime { get; set; }

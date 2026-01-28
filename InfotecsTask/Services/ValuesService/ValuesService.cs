@@ -77,15 +77,8 @@ namespace InfotecsTask.Services.ValuesService
                 _values.Add(values_from_dto);
                 line_number++;
             }
-            if (errors.Count > 0) 
+            if (errors.Count > 0)
             {
-                return errors;
-            }
-
-            if (_values.Count == 0)
-            {
-                errors.Clear();
-                errors.Add($"Ошибка: Файл пуст");
                 return errors;
             }
   

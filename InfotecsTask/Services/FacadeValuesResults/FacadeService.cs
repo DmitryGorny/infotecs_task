@@ -6,6 +6,7 @@ using InfotecsTask.Repositories.Files;
 using InfotecsTask.Services.ResultsService;
 using InfotecsTask.Services.ValuesService;
 using SQLitePCL;
+using System.Linq.Expressions;
 
 namespace InfotecsTask.Services.FacadeValuesResults
 {
@@ -31,6 +32,14 @@ namespace InfotecsTask.Services.FacadeValuesResults
         {
             if (string.IsNullOrWhiteSpace(file_name)) 
                 return new List<string> { "Ошибка: Название файла не может быть пустым" };
+
+
+            string firstLine = reader.ReadLine();
+
+            if (firstLine == null || string.IsNullOrWhiteSpace(firstLine))
+            {
+                return new List<string> { "Ошибка: файл пуст" };
+            }
 
             using var transaction = _dbContext.Database.BeginTransaction();
             try

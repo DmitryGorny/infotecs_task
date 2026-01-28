@@ -1,9 +1,11 @@
 ﻿using InfotecsTask.Dtos.ResultsDto;
 using InfotecsTask.Mappers;
 using InfotecsTask.Models;
+using InfotecsTask.Queryies;
 using InfotecsTask.Repositories.Results;
 using InfotecsTask.Repositories.ValuesRepository;
 using InfotecsTask.Services.ValuesService;
+using Results = InfotecsTask.Models.Results;
 
 namespace InfotecsTask.Services.ResultsService
 {
@@ -40,6 +42,12 @@ namespace InfotecsTask.Services.ResultsService
 
             Models.Results result = dto.ToResultsFromCreateDto();
             await _resultsRepository.CreateAsync(result);
+        }
+
+        public async Task<List<Results>> GetFilteredResults(ResultsQuery query)
+        {
+            var results = await _resultsRepository.GetFiltered(query);
+            return results;
         }
 
         protected abstract double CalculateDeltaTimeSeconds(IReadOnlyList<Values> values);

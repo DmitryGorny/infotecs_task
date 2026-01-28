@@ -26,7 +26,6 @@ namespace InfotecsTask.Services.ValuesService
 
         public async Task<List<string>> CreateValues(StreamReader reader, int file_id)
         {
-            Console.WriteLine(file_id);
             List<string> errors = new List<string>();
             string line;
             int line_number = 0;

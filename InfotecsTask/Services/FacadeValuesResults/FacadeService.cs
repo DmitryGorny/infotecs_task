@@ -35,7 +35,6 @@ namespace InfotecsTask.Services.FacadeValuesResults
 
 
             string firstLine = reader.ReadLine();
-
             if (firstLine == null || string.IsNullOrWhiteSpace(firstLine))
             {
                 return new List<string> { "Ошибка: файл пуст" };
@@ -44,16 +43,16 @@ namespace InfotecsTask.Services.FacadeValuesResults
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
-                Files file = await CreateFile(file_name);
-                List<string> errors = await _valuesService.CreateValues(reader, file.Id);
-                IReadOnlyList<Values> values = _valuesService.GetValues();
+                List<string> errors = await _valuesService.CreateValues(reader);
 
                 if (errors.Any())
                 {
                     await transaction.RollbackAsync();
-                    await RemoveFile(file);
                     return errors;
-                } 
+                }
+
+                Files file = await CreateFile(file_name);
+                IReadOnlyList<Values> values = await _valuesService.AddValuesToDB(file.Id);
 
                 await _resultsService.CreateResult(values);
 

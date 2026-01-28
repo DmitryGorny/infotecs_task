@@ -15,9 +15,6 @@ namespace InfotecsTask.Services.ValuesService
         protected readonly IValuesRepository _ValueRepository;
         private List<Values> _values { get; set; }
 
-        public IReadOnlyList<Values> GetValues() {
-           return _values.AsReadOnly();
-        }
 
         public ValuesServiceBase(IValuesRepository valueRepository)
         {
@@ -30,7 +27,7 @@ namespace InfotecsTask.Services.ValuesService
             return results;
         }
 
-        public async Task<List<string>> CreateValues(StreamReader reader, int file_id)
+        public async Task<List<string>> CreateValues(StreamReader reader)
         {
             List<string> errors = new List<string>();
             string line;
@@ -38,12 +35,7 @@ namespace InfotecsTask.Services.ValuesService
             _values = new List<Values>();
 
             while ((line = await reader.ReadLineAsync()) != null)
-            {
-                if (line_number == 0)
-                {
-                    line_number++;
-                    continue;
-                }
+            { 
 
                 if (line_number >= 10000)
                 {
@@ -52,7 +44,7 @@ namespace InfotecsTask.Services.ValuesService
                 }
                 string[] line_arr = line.Split(";");
                 List<string> current_errors = new List<string>();
-                ValuesDtoCreate? dto = ParseLine(line_arr, file_id, out current_errors);
+                ValuesDtoCreate? dto = ParseLine(line_arr, out current_errors);
 
                 if (dto == null)
                 {
@@ -69,7 +61,7 @@ namespace InfotecsTask.Services.ValuesService
                 {
                     foreach (var r in results)
                     {
-                        errors.Add($"Строка: {line_number}, {r.ErrorMessage}");
+                        errors.Add($"Строка: {line_number + 1}, {r.ErrorMessage}");
                     }
                 }
 
@@ -81,11 +73,20 @@ namespace InfotecsTask.Services.ValuesService
             {
                 return errors;
             }
+           
+            if (_values == null || !_values.Any() || _values.All(v => v == null))
+                return new List<string> { "Ошибка: Файл пуст" };
   
-            await SaveToDB(_values);
             return errors;
         }
-        protected abstract ValuesDtoCreate? ParseLine(string[] line, int file_id, out List<string> errors);
+
+        public async Task<IReadOnlyList<Values>> AddValuesToDB(int fileId)
+        {
+            _values.ForEach(v =>  v.FileId = fileId);
+            await SaveToDB(_values);
+            return _values.AsReadOnly();
+        }
+        protected abstract ValuesDtoCreate? ParseLine(string[] line, out List<string> errors);
 
         protected abstract Task SaveToDB(List<Values> values);
 
@@ -105,7 +106,7 @@ namespace InfotecsTask.Services.ValuesService
         
         }
 
-        protected override ValuesDtoCreate? ParseLine(string[] line, int file_id, out List<string> errors)
+        protected override ValuesDtoCreate? ParseLine(string[] line, out List<string> errors)
         {
             errors = new List<string>();
 
@@ -140,7 +141,7 @@ namespace InfotecsTask.Services.ValuesService
                 Date = date!.Value, 
                 ExecutionTime = execution_time!.Value, 
                 Value = value!.Value,
-                FileId = file_id,    
+                FileId = 0,    
             };
             
             

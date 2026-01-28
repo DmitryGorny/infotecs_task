@@ -13,7 +13,9 @@ namespace InfotecsTask.Dtos.ValuesDtos.Validators
 
             DateTime minDate = new DateTime(2000, 1, 1);
             DateTime currentDate = DateTime.Now.Date;
-            if (givenDate < minDate || givenDate > currentDate) return new ValidationResult("Неккоректный промежуток даты");
+            Console.WriteLine(currentDate);
+            Console.WriteLine(givenDate);
+            if (givenDate < minDate || givenDate.Date > currentDate) return new ValidationResult("Неккоректный промежуток даты");
         
 
             return ValidationResult.Success;

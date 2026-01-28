@@ -7,11 +7,11 @@ namespace InfotecsTask.Services.ValuesService
 {
     public interface IValuesService
     {
-        public Task<List<string>> CreateValues(StreamReader reader, int file_id);
-
-        public IReadOnlyList<Values> GetValues();
+        public Task<List<string>> CreateValues(StreamReader reader);
 
         public Task<List<Values>> GetSortedValues(string file_name);
+
+        public Task<IReadOnlyList<Values>> AddValuesToDB(int fileId);
     }
 
 }

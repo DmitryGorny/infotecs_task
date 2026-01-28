@@ -31,19 +31,18 @@
 git clone https://github.com/DmitryGorny/infotecs_task.git
 cd InfotecsTask
 
-2. Настройте подключение к PostgreSQL в appsettings.json:
-"ConnectionStrings": {
+2. Настройте подключение к PostgreSQL в appsettings.json: <br> "ConnectionStrings": {
   "DefaultConnection": "Host=localhost;Database=infotecsdb;Username=postgres;Password=yourpassword"
 }
 
-3. Установите зависимости:
+4. Установите зависимости:<br>
 dotnet restore
 
-4. Миграции
+5. Миграции:<br>
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 
-5. Запуск
+6. Запуск:<br>
 dotnet watch run
 
 
